@@ -33,7 +33,7 @@ def test_download_kwargs(mock_download, file):
     MockAzureBlob = mock_download(file_name, file_location)
 
     # Download blob and make DataFrame
-    df = pandablob.blob_to_df(MockAzureBlob, pandas_arguments)
+    df = pandablob.blob_to_df(MockAzureBlob, PANDAS_ARGUMENTS[file])
 
     # download blob and return DataFrame
     if extension == ".csv" or extension == ".txt":
