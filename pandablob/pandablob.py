@@ -1,8 +1,9 @@
-from azure.storage.blob import BlobClient
-from typing import Dict, Any, Optional
-from pathlib import Path
-import pandas as pd
 import io
+from pathlib import Path
+from typing import Any, Dict, Optional
+
+import pandas as pd
+from azure.storage.blob import BlobClient
 
 
 def df_to_blob(
@@ -42,6 +43,10 @@ def blob_to_df(
     blob_client: BlobClient, pandas_kwargs: Optional[Dict[str, Any]] = None
 ) -> pd.DataFrame:
     """Download a blob and return a pandas DataFrame."""
+
+    # check for kwargs
+    if not pandas_kwargs:
+        pandas_kwargs = {}
 
     # check the file extension
     extension = Path(blob_client.blob_name).suffix

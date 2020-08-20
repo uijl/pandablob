@@ -1,18 +1,38 @@
-import pytest
-from pathlib import Path
-import pandas as pd
+"""Test downloading a blob and returning a DataFrame."""
+
 import io
-from mock import Mock, patch
+from pathlib import Path
+
+import pandas as pd
+import pytest
+from mock import MagicMock, Mock, PropertyMock, patch
+
 import pandablob
 
-FILES = Path("test_files")
-FILES_IO = Path("test_io")
+FILES = Path.cwd().joinpath("tests", "test_files")
+FILES_IO = Path.cwd().joinpath("tests", "test_io")
 
 
 def mock_download(mock_azure_blob, file):
     """Mock uploading to the azure blob."""
 
+    # Download blob and make DataFrame
     df = pandablob.blob_to_df(mock_azure_blob)
+
+    # Make DataFrame from original file and compare
+    file_location = FILES.joinpath(file)
+    extension = file_location.suffix
+
+    # download blob and return DataFrame
+    if extension == ".csv" or extension == ".txt":
+        compare_df = pd.read_table(file_location)  # , delimiter=",", index_col=0)
+        assert df.equals(compare_df)
+    if extension == ".json":
+        compare_df = pd.read_json(file_location)  # , orient="index")
+        assert df.equals(compare_df)
+    if extension == ".xlsx" or extension == ".xls":
+        compare_df = pd.read_excel(file_location)  # , index_col=0)
+        assert df.equals(compare_df)
 
 
 @pytest.mark.parametrize(
@@ -25,27 +45,27 @@ def mock_download(mock_azure_blob, file):
         "test_data.xlsx",
     ],
 )
-def test_upload(file):
-    with patch("azure.storage.blob.BlobServiceClient", autospec=True) as MockAzureBlob:
+def test_download(file):
+    """Test downloading the listed files."""
 
-        file_location = FILES.joinpath(file)
-        extension = file_location.suffix.replace(".", "")
-
-        if extension in ["csv", "json", "txt"]:
-            with open(FILES_IO.joinpath(f"{extension}_io"), "r") as f:
-                content = io.StringIO(f)
-        elif extension in ["xls", "xlsx"]:
-            with open(FILES_IO.joinpath(f"{extension}_io"), "rb") as f:
-                content = io.BytesIO(f)
+    with patch("azure.storage.blob.BlobClient", autospec=True) as MockAzureBlob:
 
         # Mock the returned contend
         mock_content = Mock()
-        mock_content.readall.return_value = content
+        file_location = FILES.joinpath(file)
+        with open(file_location, "rb") as f:
+            mock_content.readall.return_value = f.read()
 
         # Mock the methods of the BlobServiceClient
         mock_blob_client = Mock()
         mock_blob_client.download_blob.return_value = mock_content
-        mock_blob_client.blob_name.return_value = file
+
+        # Assign mock to BlobServiceClient
+        MockAzureBlob = mock_blob_client
+
+        # Mock the returned name
+        mock_name = PropertyMock(return_value=file)
+        type(MockAzureBlob).blob_name = mock_name
 
         # Run test
-        mock_download(mock_blob_client, file)
+        mock_download(MockAzureBlob, file)

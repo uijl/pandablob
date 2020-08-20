@@ -4,4 +4,4 @@ __author__ = "Joris den Uijl"
 __email__ = "jorisdenuijl@gmail.com"
 __version__ = "0.0.1"
 
-from .pandablob import df_to_blob, blob_to_df
+from .pandablob import blob_to_df, df_to_blob
