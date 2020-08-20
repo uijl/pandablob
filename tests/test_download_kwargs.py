@@ -1,4 +1,4 @@
-"""Test downloading a blob and returning a DataFrame."""
+"""Test downloading a blob and returning a DataFrame with given kwargs."""
 
 import io
 from pathlib import Path
@@ -21,7 +21,7 @@ PANDAS_ARGUMENTS = {
 
 
 @pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
-def test_download(file, mock_download):
+def test_download_kwargs(mock_download, file):
     """Mock uploading to the azure blob."""
 
     # Create required input
@@ -33,15 +33,15 @@ def test_download(file, mock_download):
     MockAzureBlob = mock_download(file_name, file_location)
 
     # Download blob and make DataFrame
-    df = pandablob.blob_to_df(MockAzureBlob)
+    df = pandablob.blob_to_df(MockAzureBlob, pandas_arguments)
 
-    # Make DataFrame from original file and compare
+    # download blob and return DataFrame
     if extension == ".csv" or extension == ".txt":
-        compare_df = pd.read_table(file_location)
+        compare_df = pd.read_table(file_location, delimiter=",", index_col=0)
         assert df.equals(compare_df)
     if extension == ".json":
-        compare_df = pd.read_json(file_location)
+        compare_df = pd.read_json(file_location, orient="index")
         assert df.equals(compare_df)
     if extension == ".xlsx" or extension == ".xls":
-        compare_df = pd.read_excel(file_location)
+        compare_df = pd.read_excel(file_location, index_col=0)
         assert df.equals(compare_df)
