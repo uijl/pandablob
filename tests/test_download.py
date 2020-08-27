@@ -9,8 +9,6 @@ import pytest
 import pandablob
 
 FILES = Path.cwd().joinpath("tests", "test_files")
-FILES_IO = Path.cwd().joinpath("tests", "test_io")
-
 PANDAS_ARGUMENTS = {
     "csv": {"delimiter": ",", "index_col": 0},
     "json": {"orient": "index"},

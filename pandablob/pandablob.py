@@ -44,8 +44,6 @@ def blob_to_df(
 ) -> pd.DataFrame:
     """Download a blob and return a pandas DataFrame."""
 
-
-    print("**", blob_client.blob_name)
     # check for kwargs
     if not pandas_kwargs:
         pandas_kwargs = {}
