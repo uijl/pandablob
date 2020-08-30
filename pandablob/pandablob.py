@@ -14,6 +14,10 @@ def df_to_blob(
 ) -> None:
     """Upload a pandas DataFrame and store it into a blob."""
 
+    # check for kwargs
+    if not pandas_kwargs:
+        pandas_kwargs = {}
+
     # define empty stream
     stream = None
 
@@ -36,7 +40,7 @@ def df_to_blob(
         blob_client.upload_blob(stream.getvalue(), overwrite=overwrite)
         return
 
-    return TypeError(f"{extension} files are not yet supported.")
+    raise TypeError(f"{extension} files are not yet supported.")
 
 
 def blob_to_df(
@@ -62,4 +66,4 @@ def blob_to_df(
         data_stream = io.BytesIO(blob_client.download_blob().readall())
         return pd.read_excel(data_stream, **pandas_kwargs)
 
-    return TypeError(f"{extension} files are not yet supported.")
+    raise TypeError(f"{extension} files are not yet supported.")

@@ -1,37 +1,28 @@
 """Test downloading a blob and returning a DataFrame with given kwargs."""
 
 import io
-from pathlib import Path
 
 import pandas as pd
 import pytest
 
 import pandablob
 
-FILES = Path.cwd().joinpath("tests", "test_files")
-PANDAS_ARGUMENTS = {
-    "csv": {"delimiter": ",", "index_col": 0},
-    "json": {"orient": "index"},
-    "txt": {"delimiter": ",", "index_col": 0},
-    "xls": {"index_col": 0},
-    "xlsx": {"index_col": 0},
-}
 
-
+@pytest.mark.skip(reason="no way of currently testing this")
 @pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
-def test_download_kwargs(mock_download, file):
+def test_download_kwargs(mock_download, test_files, pandas_arguments, file):
     """Mock uploading to the azure blob."""
 
     # Create required input
     file_name = f"test_data.{file}"
-    file_location = FILES.joinpath(file_name)
+    file_location = test_files.joinpath(file_name)
     extension = file_location.suffix
 
     # Get mock object from fixture
     MockAzureBlob = mock_download(file_name, file_location)
 
     # Download blob and make DataFrame
-    df = pandablob.blob_to_df(MockAzureBlob, PANDAS_ARGUMENTS[file])
+    df = pandablob.blob_to_df(MockAzureBlob, pandas_arguments[file])
 
     # download blob and return DataFrame
     if extension == ".csv" or extension == ".txt":

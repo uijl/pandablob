@@ -1,0 +1,5 @@
+[run]
+source = pandablob
+
+[report]
+omit = tests*, .eggs*

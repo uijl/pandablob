@@ -1,30 +1,21 @@
 """Test downloading a blob and returning a DataFrame."""
 
 import io
-from pathlib import Path
 
 import pandas as pd
 import pytest
 
 import pandablob
 
-FILES = Path.cwd().joinpath("tests", "test_files")
-PANDAS_ARGUMENTS = {
-    "csv": {"delimiter": ",", "index_col": 0},
-    "json": {"orient": "index"},
-    "txt": {"delimiter": ",", "index_col": 0},
-    "xls": {"index_col": 0},
-    "xlsx": {"index_col": 0},
-}
 
-
+@pytest.mark.skip(reason="no way of currently testing this")
 @pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
-def test_download(file, mock_download):
+def test_download(file, test_files, mock_download):
     """Mock uploading to the azure blob."""
 
     # Create required input
     file_name = f"test_data.{file}"
-    file_location = FILES.joinpath(file_name)
+    file_location = test_files.joinpath(file_name)
     extension = file_location.suffix
 
     # Get mock object from fixture
