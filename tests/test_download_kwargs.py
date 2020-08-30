@@ -9,7 +9,7 @@ import pandablob
 
 
 @pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
-def test_download_kwargs(mock_download, test_files, pandas_arguments, file):
+def test_download_kwargs(mock_download, test_files, pandas_arguments_download, file):
     """Mock uploading to the azure blob."""
 
     # Create required input
@@ -21,7 +21,7 @@ def test_download_kwargs(mock_download, test_files, pandas_arguments, file):
     MockAzureBlob = mock_download(file_name, file_location)
 
     # Download blob and make DataFrame
-    df = pandablob.blob_to_df(MockAzureBlob, pandas_arguments[file])
+    df = pandablob.blob_to_df(MockAzureBlob, pandas_arguments_download[file])
 
     # download blob and return DataFrame
     if extension == ".csv" or extension == ".txt":

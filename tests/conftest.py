@@ -1,7 +1,9 @@
 """Fixtures for testing."""
 
+import io
 from pathlib import Path
 
+import pandas as pd
 import pytest
 from mock import Mock, PropertyMock, patch
 
@@ -13,28 +15,8 @@ def test_files():
     return Path.cwd().joinpath("tests", "test_files")
 
 
-# @pytest.fixture()
-# def test_files_io():
-#     """Return the directory with the files for testing."""
-
-#     return_dict = {}
-#     file_path = Path.cwd().joinpath("tests", "test_io")
-#     with open(file_path.joinpath("csv_io"), "rt") as f:
-#         return_dict.update({"csv": f.read()})
-#     with open(file_path.joinpath("txt_io"), "rt") as f:
-#         return_dict.update({"txt": f.read()})
-#     with open(file_path.joinpath("json_io"), "rt") as f:
-#         return_dict.update({"json": f.read()})
-#     with open(file_path.joinpath("xls_io"), "rb") as f:
-#         return_dict.update({"xls": f.read()})
-#     with open(file_path.joinpath("xlsx_io"), "rb") as f:
-#         return_dict.update({"xlsx": f.read()})
-
-#     return return_dict
-
-
 @pytest.fixture()
-def pandas_arguments():
+def pandas_arguments_download():
     """Return a dict with the keyword arguments for pandas."""
 
     return {
@@ -44,6 +26,26 @@ def pandas_arguments():
         "xls": {"index_col": 0},
         "xlsx": {"index_col": 0},
     }
+
+
+@pytest.fixture()
+def dataframe_upload():
+    """Return a dict with the keyword arguments for pandas."""
+
+    def _make_dataframe(file_extension, file, stream=False):
+        """Make a pandas DataFrame."""
+
+        if file_extension in [".csv", ".txt"]:
+            arguments = {"index_col": 0, "delimiter": ",", "float_precision": "high"}
+            if not stream:
+                return pd.read_table(file, **arguments)
+            return pd.read_table(io.StringIO(file), **arguments)
+        elif file_extension in [".xls", ".xlsx"]:
+            return pd.read_excel(file, index_col=0)
+        elif file_extension == ".json":
+            return pd.read_json(file)
+
+    return _make_dataframe
 
 
 @pytest.fixture()

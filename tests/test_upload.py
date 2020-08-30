@@ -9,7 +9,7 @@ import pandablob
 
 
 @pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
-def test_upload(file, test_files, pandas_arguments, mock_upload):
+def test_upload(file, test_files, dataframe_upload, mock_upload):
     """Mock uploading to the azure blob."""
 
     # Create required input
@@ -21,38 +21,12 @@ def test_upload(file, test_files, pandas_arguments, mock_upload):
     MockAzureBlob = mock_upload(file_name)
 
     # Make DataFrame to upload
-    if extension == ".csv" or extension == ".txt":
-        df = pd.read_table(
-            file_location, index_col=0, float_precision="high", delimiter=","
-        )
-        pandablob.df_to_blob(df, MockAzureBlob)
-    elif extension == ".json":
-        df = pd.read_json(file_location)
-        pandablob.df_to_blob(df, MockAzureBlob)
-    elif extension == ".xlsx" or extension == ".xls":
-        df = pd.read_excel(file_location, index_col=0)
-        pandablob.df_to_blob(df, MockAzureBlob)
+    df = dataframe_upload(extension, file_location)
+    pandablob.df_to_blob(df, MockAzureBlob)
 
     # Mock uploading the DataFrame
     pandablob_stream = MockAzureBlob.upload_blob.call_args[0][0]
-    if extension == ".csv":
-        result_df = pd.read_table(
-            io.StringIO(pandablob_stream),
-            index_col=0,
-            delimiter=",",
-            float_precision="high",
-        )
-    elif extension == ".txt":
-        result_df = pd.read_table(
-            io.StringIO(pandablob_stream),
-            index_col=0,
-            delimiter=",",
-            float_precision="high",
-        )
-    elif extension == ".json":
-        result_df = pd.read_json(pandablob_stream)
-    elif extension == ".xlsx" or extension == ".xls":
-        result_df = pd.read_excel(pandablob_stream, index_col=0)
 
     # Test result
+    result_df = dataframe_upload(extension, pandablob_stream, stream=True)
     assert df.equals(result_df)
