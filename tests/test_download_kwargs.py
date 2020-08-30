@@ -8,7 +8,6 @@ import pytest
 import pandablob
 
 
-@pytest.mark.skip(reason="no way of currently testing this")
 @pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
 def test_download_kwargs(mock_download, test_files, pandas_arguments, file):
     """Mock uploading to the azure blob."""

@@ -22,27 +22,29 @@ def test_upload(file, test_files, pandas_arguments, mock_upload):
 
     # Make DataFrame to upload
     if extension == ".csv" or extension == ".txt":
-        df = pd.read_table(file_location, delimiter=",")
+        df = pd.read_table(
+            file_location, index_col=0, float_precision="high", delimiter=","
+        )
         pandablob.df_to_blob(df, MockAzureBlob)
     elif extension == ".json":
         df = pd.read_json(file_location)
         pandablob.df_to_blob(df, MockAzureBlob)
     elif extension == ".xlsx" or extension == ".xls":
-        df = pd.read_excel(file_location)
+        df = pd.read_excel(file_location, index_col=0)
         pandablob.df_to_blob(df, MockAzureBlob)
 
     # Mock uploading the DataFrame
     pandablob_stream = MockAzureBlob.upload_blob.call_args[0][0]
     if extension == ".csv":
         result_df = pd.read_table(
-            io.StringIO(pandablob_stream.get_value()),
+            io.StringIO(pandablob_stream),
             index_col=0,
             delimiter=",",
             float_precision="high",
         )
     elif extension == ".txt":
         result_df = pd.read_table(
-            io.StringIO(pandablob_stream.get_value()),
+            io.StringIO(pandablob_stream),
             index_col=0,
             delimiter=",",
             float_precision="high",
@@ -50,11 +52,7 @@ def test_upload(file, test_files, pandas_arguments, mock_upload):
     elif extension == ".json":
         result_df = pd.read_json(pandablob_stream)
     elif extension == ".xlsx" or extension == ".xls":
-        result_df = pd.read_excel(pandablob_stream)
+        result_df = pd.read_excel(pandablob_stream, index_col=0)
 
     # Test result
-    # assert df.equals(result_df)
-
-    for ix in df.index:
-        for col in df.columns:
-            assert df.loc[ix, col] == result_df.loc[ix, col]
+    assert df.equals(result_df)
