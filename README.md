@@ -1,52 +1,54 @@
-[![CircleCI Status](https://circleci.com/gh/uijl/wtdpy.svg?style=svg)](https://circleci.com/gh/uijl/wtdpy)
-[![Documentation Status](https://readthedocs.org/projects/wtdpy/badge/?version=latest)](https://wtdpy.readthedocs.io/en/latest/?badge=latest)
-[![Coverage Badge](https://artifact-getter.herokuapp.com/get_coverage_badge?circle_url=https://circleci.com/gh/uijl/wtdpy&circle_token=4&output=str)](https://artifact-getter.herokuapp.com/get_coverage_report?circle_url=https://circleci.com/gh/uijl/wtdpy&circle_token=4)
-[![PyPI Latest Release](https://img.shields.io/pypi/v/wtdpy.svg)](https://pypi.org/project/wtdpy/)
+# PandaBlob
 
-# WTDpy
-
-Basic calls to the World Trading Data API with Python. 
-You can find the documentation over [here](https://wtdpy.readthedocs.io).
+Make a pandas DataFrame from an Azure blob and vice versa.
 
 ## Installation
 
-Installing WTDpy via [pip](https://pip.pypa.io) is the preferred method, as it will always install the most recent stable release. If you do not have
+Installing PandaBlob via [pip](https://pip.pypa.io) is the preferred method, as it will always install the most recent stable release. If you do not have
 [pip](https://pip.pypa.io) installed, this [Python installation guide](http://docs.python-guide.org/en/latest/starting/installation/) can guide you through the process.
 
-To install WTDpy, run this command in your terminal:
+To install PandaBlob, run this command in your terminal:
 
 ``` bash
 # Use pip to install wtdpy
-pip install wtdpy
+pip install pandablob
 ```
 
 Downloading and installing WTDpy from source is also possible, follow the code below.
 
 ``` bash
 # Download the package
-git clone https://github.com/uijl/wtdpy
+git clone https://github.com/uijl/pandablob
 
 # Go to the correct folder
-cd wtdpy
+cd pandablob
 
 # Install package
 pip install -e .
 ```
 
-## Starting up
+## Usage
 
-The code snip below shows how you can initialise the WTDpy class. As soon as you have the `WTDpy` class initialised you can start calling the various functions.
+The code snip below shows how you can use PandaBlob, all you need is a _[BlobClient](https://docs.microsoft.com/nl-nl/python/api/azure-storage-blob/azure.storage.blob.blobclient?view=azure-python)_ and possibly a pandas DataFrame or some keyword arguments for pandas.
 
 ```python
-# Import wtdpy library
-from wtdpy import WTDpy
+# Import the Azure SDK and pandablob
+import pandablob
 
-# Specifiy your api key
-api_token = "Your_API_Token"
+from azure.storage.blob import ContainerClient
 
-# Initialise class
-wtdpy = WTDpy(api_token=api_token)
+# Your Azure Credentials
+account_url = "https://my_account_url.blob.core.windows.net/"
+token = "your_key_string"
+container = "your_container"
+blobname = "your_blob_name.csv"
 
-# Search for a stock or index
-MSFT = wtdpy.search("Microsoft")
+container_client_survey = ContainerClient(account_url, container, credential=token)
+blob_client = container_client_survey.get_blob_client(blob=blobname)
+
+# Specifiy your pandas keyword arguments
+pandas_kwargs = {"delimiter": ",", "index_col": 0}
+
+# Read the blob as a pandas DataFrame
+df = pandablob.blob_to_df(blob_client, pandas_kwargs)
 ```
