@@ -2,10 +2,10 @@
 
 import io
 from pathlib import Path
+from unittest.mock import Mock, PropertyMock, patch
 
 import pandas as pd
 import pytest
-from mock import Mock, PropertyMock, patch
 
 
 @pytest.fixture()
