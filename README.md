@@ -1,3 +1,5 @@
+![PyTest](https://github.com/uijl/pandablob/workflows/PyTest/badge.svg)
+
 # PandaBlob
 
 Make a pandas DataFrame from an Azure blob and vice versa.
