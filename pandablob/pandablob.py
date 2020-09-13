@@ -18,27 +18,21 @@ def df_to_blob(
     if not pandas_kwargs:
         pandas_kwargs = {}
 
-    # define empty stream
-    stream = None
-
     # check the file extension
     extension = Path(blob_client.blob_name).suffix
 
-    # fill io-stream
-    if extension == ".csv" or extension == ".txt":
-        stream = io.StringIO()
-        df.to_csv(stream, **pandas_kwargs)
-    elif extension == ".json":
-        stream = io.StringIO()
-        df.to_json(stream, **pandas_kwargs)
-    elif extension == ".xlsx" or extension == ".xls":
-        stream = io.BytesIO()
-        df.to_excel(stream, **pandas_kwargs)
-
-    # if succesfull, upload blob
-    if stream:
-        blob_client.upload_blob(stream.getvalue(), overwrite=overwrite)
-        return
+    # make DataFrame and upload
+    if extension in [".csv", ".txt", ".json"]:
+        string_io = io.StringIO()
+        if extension in [".csv", ".txt"]:
+            df.to_csv(string_io, **pandas_kwargs)
+        if extension == ".json":
+            df.to_json(string_io, **pandas_kwargs)
+        return blob_client.upload_blob(string_io.getvalue(), overwrite=overwrite)
+    if extension == ".xlsx" or extension == ".xls":
+        bytes_io = io.BytesIO()
+        df.to_excel(bytes_io, **pandas_kwargs)
+        return blob_client.upload_blob(bytes_io.getvalue(), overwrite=overwrite)
 
     raise TypeError(f"{extension} files are not yet supported.")
 

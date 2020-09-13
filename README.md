@@ -2,7 +2,7 @@
 
 # PandaBlob
 
-Make a pandas DataFrame from an Azure blob and vice versa.
+Functions to easily transform Azure blobs into pandas DataFrames and vice versa. 
 
 ## Installation
 
@@ -12,11 +12,11 @@ Installing PandaBlob via [pip](https://pip.pypa.io) is the preferred method, as 
 To install PandaBlob, run this command in your terminal:
 
 ``` bash
-# Use pip to install wtdpy
+# Use pip to install PandaBlob
 pip install pandablob
 ```
 
-Downloading and installing WTDpy from source is also possible, follow the code below.
+Downloading and installing PandaBlob from source is also possible, follow the code below.
 
 ``` bash
 # Download the package

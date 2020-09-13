@@ -1,5 +1,4 @@
 mypy
-pylama
 pytest
 pytest-black
 pytest-cov
