@@ -1,4 +1,5 @@
 ![PyTest](https://github.com/uijl/pandablob/workflows/PyTest/badge.svg)
+[![PyPI Latest Release](https://img.shields.io/pypi/v/pandablob.svg)](https://pypi.org/project/pandablob/)
 
 # PandaBlob
 
