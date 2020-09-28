@@ -46,8 +46,8 @@ token = "your_key_string"
 container = "your_container"
 blobname = "your_blob_name.csv"
 
-container_client_survey = ContainerClient(account_url, container, credential=token)
-blob_client = container_client_survey.get_blob_client(blob=blobname)
+container_client = ContainerClient(account_url, container, credential=token)
+blob_client = container_client.get_blob_client(blob=blobname)
 
 # Specifiy your pandas keyword arguments
 pandas_kwargs = {"delimiter": ",", "index_col": 0}
