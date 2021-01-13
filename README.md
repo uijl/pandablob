@@ -55,3 +55,10 @@ pandas_kwargs = {"delimiter": ",", "index_col": 0}
 # Read the blob as a pandas DataFrame
 df = pandablob.blob_to_df(blob_client, pandas_kwargs)
 ```
+
+## To do list:
+
+Some other stuff that needs to be done:
+
+- [ ] Include other files;
+- [ ] Easier downloading a .csv file;
