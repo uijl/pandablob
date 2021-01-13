@@ -50,7 +50,7 @@ container_client = ContainerClient(account_url, container, credential=token)
 blob_client = container_client.get_blob_client(blob=blobname)
 
 # Specifiy your pandas keyword arguments
-pandas_kwargs = {"delimiter": ",", "index_col": 0}
+pandas_kwargs = {"index_col": 0}
 
 # Read the blob as a pandas DataFrame
 df = pandablob.blob_to_df(blob_client, pandas_kwargs)
@@ -61,4 +61,4 @@ df = pandablob.blob_to_df(blob_client, pandas_kwargs)
 Some other stuff that needs to be done:
 
 - [ ] Include other files;
-- [ ] Easier downloading a .csv file;
+- [x] Easier downloading a .csv file;

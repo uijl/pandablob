@@ -50,14 +50,14 @@ def blob_to_df(
     extension = Path(blob_client.blob_name).suffix
 
     # download blob and return DataFrame
-    if extension == ".csv" or extension == ".txt":
-        data_stream = io.BytesIO(blob_client.download_blob().readall())
+    data_stream = io.BytesIO(blob_client.download_blob().readall())
+    if extension == ".csv":
+        return pd.read_csv(data_stream, **pandas_kwargs)
+    if extension == ".txt":
         return pd.read_table(data_stream, **pandas_kwargs)
     if extension == ".json":
-        data_stream = io.BytesIO(blob_client.download_blob().readall())
         return pd.read_json(data_stream, **pandas_kwargs)
     if extension in [".xls", ".xlsx"]:
-        data_stream = io.BytesIO(blob_client.download_blob().readall())
         if extension == ".xls" and "engine" not in pandas_kwargs.keys():
             pandas_kwargs.update({"engine": "xlrd"})
         elif "engine" not in pandas_kwargs.keys():
