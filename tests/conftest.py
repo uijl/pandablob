@@ -23,8 +23,8 @@ def pandas_arguments_download():
         "csv": {"delimiter": ",", "index_col": 0},
         "json": {"orient": "index"},
         "txt": {"delimiter": ",", "index_col": 0},
-        "xls": {"index_col": 0},
-        "xlsx": {"index_col": 0},
+        "xls": {"index_col": 0, "engine": "xlrd"},
+        "xlsx": {"index_col": 0, "engine": "openpyxl"},
     }
 
 
