@@ -29,8 +29,12 @@ def df_to_blob(
         if extension == ".json":
             df.to_json(string_io, **pandas_kwargs)
         return blob_client.upload_blob(string_io.getvalue(), overwrite=overwrite)
-    if extension == ".xlsx" or extension == ".xls":
+    if extension in [".xls", ".xlsx"]:
         bytes_io = io.BytesIO()
+        if extension == ".xls":
+            pandas_kwargs.update({"engine": "xlrd"})
+        else:
+            pandas_kwargs.update({"engine": "openpyxl"})
         df.to_excel(bytes_io, **pandas_kwargs)
         return blob_client.upload_blob(bytes_io.getvalue(), overwrite=overwrite)
 
