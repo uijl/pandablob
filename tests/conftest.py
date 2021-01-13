@@ -58,6 +58,11 @@ def dataframe_upload():
                 return pd.read_table(file, **arguments)
             return pd.read_table(io.StringIO(file), **arguments)
         elif file_extension in [".xls", ".xlsx"]:
+            if "engine" not in additional_kwargs.keys():
+                if file_extension == ".xls":
+                    additional_kwargs.update({"engine": "xlrd"})
+                else:
+                    additional_kwargs.update({"engine": "openpyxl"})
             return pd.read_excel(file, index_col=0, **additional_kwargs)
         elif file_extension == ".json":
             return pd.read_json(file, **additional_kwargs)

@@ -30,6 +30,9 @@ def test_download(file, test_files, mock_download):
     if extension == ".json":
         compare_df = pd.read_json(file_location)
         assert df.equals(compare_df)
-    if extension == ".xlsx" or extension == ".xls":
-        compare_df = pd.read_excel(file_location)
+    if extension == ".xls":
+        compare_df = pd.read_excel(file_location, engine="xlrd")
+        assert df.equals(compare_df)
+    if extension == ".xlsx":
+        compare_df = pd.read_excel(file_location, engine="openpyxl")
         assert df.equals(compare_df)
