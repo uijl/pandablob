@@ -62,7 +62,9 @@ def dataframe_upload():
                 return pd.read_excel(
                     file, index_col=0, engine="xlrd", **additional_kwargs
                 )
-            return pd.read_excel(file, index_col=0, **additional_kwargs)
+            return pd.read_excel(
+                file, index_col=0, engine="openpyxl", **additional_kwargs
+            )
         elif file_extension == ".json":
             return pd.read_json(file, **additional_kwargs)
 
