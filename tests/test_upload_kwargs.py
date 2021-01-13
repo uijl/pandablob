@@ -9,10 +9,10 @@ import pandablob
 
 
 @pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
-def test_upload(
+def test_upload_kwargs(
     file, test_files, dataframe_upload, pandas_arguments_upload, mock_upload
 ):
-    """Mock uploading to the azure blob."""
+    """Mock uploading with additional kwargs to the azure blob."""
 
     # Create required input
     file_name = f"test_data.{file}"

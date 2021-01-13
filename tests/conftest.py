@@ -58,9 +58,11 @@ def dataframe_upload():
                 return pd.read_table(file, **arguments)
             return pd.read_table(io.StringIO(file), **arguments)
         elif file_extension in [".xls", ".xlsx"]:
-            if file_extension == ".xls":
-                return pd.read_excel(file, index_col=0, engine="xlrd", **additional_kwargs)
-            return pd.read_excel(file, index_col=0, engine="openpyxl", **additional_kwargs)
+            if file_extension == ".xls" and not stream:
+                return pd.read_excel(
+                    file, index_col=0, engine="xlrd", **additional_kwargs
+                )
+            return pd.read_excel(file, index_col=0, **additional_kwargs)
         elif file_extension == ".json":
             return pd.read_json(file, **additional_kwargs)
 
