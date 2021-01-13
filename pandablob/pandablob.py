@@ -50,7 +50,10 @@ def blob_to_df(
     extension = Path(blob_client.blob_name).suffix
 
     # download blob and return DataFrame
-    if extension == ".csv" or extension == ".txt":
+    if extension == ".csv":
+        data_stream = io.BytesIO(blob_client.download_blob().readall())
+        return pd.read_csv(data_stream, **pandas_kwargs)
+    if extension == ".txt":
         data_stream = io.BytesIO(blob_client.download_blob().readall())
         return pd.read_table(data_stream, **pandas_kwargs)
     if extension == ".json":
