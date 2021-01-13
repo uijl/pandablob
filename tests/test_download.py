@@ -24,7 +24,10 @@ def test_download(file, test_files, mock_download):
     df = pandablob.blob_to_df(MockAzureBlob)
 
     # Make DataFrame from original file and compare
-    if extension == ".csv" or extension == ".txt":
+    if extension == ".csv":
+        compare_df = pd.read_csv(file_location)
+        assert df.equals(compare_df)
+    if extension == ".txt":
         compare_df = pd.read_table(file_location)
         assert df.equals(compare_df)
     if extension == ".json":
