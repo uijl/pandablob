@@ -29,7 +29,7 @@ def df_to_blob(
         if extension == ".json":
             df.to_json(string_io, **pandas_kwargs)
         return blob_client.upload_blob(string_io.getvalue(), overwrite=overwrite)
-    if extension == ".xlsx" or extension == ".xls":
+    if extension in [".xls", ".xlsx"]:
         bytes_io = io.BytesIO()
         df.to_excel(bytes_io, **pandas_kwargs)
         return blob_client.upload_blob(bytes_io.getvalue(), overwrite=overwrite)
@@ -56,8 +56,12 @@ def blob_to_df(
     if extension == ".json":
         data_stream = io.BytesIO(blob_client.download_blob().readall())
         return pd.read_json(data_stream, **pandas_kwargs)
-    if extension == ".xlsx" or extension == ".xls":
+    if extension in [".xls", ".xlsx"]:
         data_stream = io.BytesIO(blob_client.download_blob().readall())
+        if extension == ".xls" and "engine" not in pandas_kwargs.keys():
+            pandas_kwargs.update({"engine": "xlrd"})
+        elif "engine" not in pandas_kwargs.keys():
+            pandas_kwargs.update({"engine": "openpyxl"})
         return pd.read_excel(data_stream, **pandas_kwargs)
 
     raise TypeError(f"{extension} files are not yet supported.")

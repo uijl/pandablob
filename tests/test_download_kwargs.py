@@ -10,7 +10,7 @@ import pandablob
 
 @pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
 def test_download_kwargs(mock_download, test_files, pandas_arguments_download, file):
-    """Mock uploading to the azure blob."""
+    """Mock downloading from the azure blob with additional kwargs."""
 
     # Create required input
     file_name = f"test_data.{file}"
@@ -30,6 +30,9 @@ def test_download_kwargs(mock_download, test_files, pandas_arguments_download, f
     if extension == ".json":
         compare_df = pd.read_json(file_location, orient="index")
         assert df.equals(compare_df)
-    if extension == ".xlsx" or extension == ".xls":
-        compare_df = pd.read_excel(file_location, index_col=0)
+    if extension == ".xls":
+        compare_df = pd.read_excel(file_location, index_col=0, engine="xlrd")
+        assert df.equals(compare_df)
+    if extension == ".xlsx":
+        compare_df = pd.read_excel(file_location, index_col=0, engine="openpyxl")
         assert df.equals(compare_df)
