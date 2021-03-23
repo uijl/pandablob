@@ -3,6 +3,6 @@ pytest
 pytest-black
 pytest-cov
 pytest-isort
-pytest-mypy
+pytest-mypy==0.8.0
 pytest-runner
 pytest-timeout
