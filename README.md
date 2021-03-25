@@ -62,3 +62,4 @@ Some other stuff that needs to be done:
 
 - [ ] Include other files;
 - [x] Easier downloading a .csv file;
+- [x] Added MIT license.
