@@ -19,10 +19,12 @@ setup(
     classifiers=[
         "Natural Language :: English",
         "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     description="Functions to easily transform Azure blobs into pandas DataFrames and vice versa.",
     install_requires=requirements,
+    license="MIT",
     long_description=long_description,
     long_description_content_type="text/markdown",
     include_package_data=True,
