@@ -1,5 +1,6 @@
 ![PyTest](https://github.com/uijl/pandablob/workflows/PyTest/badge.svg)
 [![PyPI Latest Release](https://img.shields.io/pypi/v/pandablob.svg)](https://pypi.org/project/pandablob/)
+[![Downloads](https://pepy.tech/badge/pandablob)](https://pepy.tech/project/pandablob)
 
 # PandaBlob
 
@@ -12,14 +13,14 @@ Installing PandaBlob via [pip](https://pip.pypa.io) is the preferred method, as 
 
 To install PandaBlob, run this command in your terminal:
 
-``` bash
+```bash
 # Use pip to install PandaBlob
 pip install pandablob
 ```
 
 Downloading and installing PandaBlob from source is also possible, follow the code below.
 
-``` bash
+```bash
 # Download the package
 git clone https://github.com/uijl/pandablob
 
@@ -55,6 +56,14 @@ pandas_kwargs = {"index_col": 0}
 # Read the blob as a pandas DataFrame
 df = pandablob.blob_to_df(blob_client, pandas_kwargs)
 ```
+
+## Potential errors
+
+There are three common errors that can be returned. Two are related to the blob storage and one because of the current limitations of pandablob.
+
+- **ResourceExistsError** - If the specified blob is already on the blob, this error is returned. There are two options, you can add the `overwrite=True` argument to your `df_to_blob` function or you can catch the exception. If you wish to enter it in an except statement, you can import it using `from azure.core.exceptions import ResourceExistsError`;
+- **ResourceNotFoundError** - If the specified blob is not found, this error is returned. If you wish to enter it in an except statement, you can import it using `from azure.core.exceptions import ResourceNotFoundError`;
+- **TypeError** - This error is returned by pandablob if you want to upload or download an extensiontype that is not yet supported. Currently only the following extensions are supported: `.csv` `.json` `.txt`, `.xls` and `.xlsx`.
 
 ## To do list:
 
