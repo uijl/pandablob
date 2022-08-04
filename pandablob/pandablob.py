@@ -26,12 +26,15 @@ def df_to_blob(
         string_io = io.StringIO()
         if extension in [".csv", ".txt"]:
             df.to_csv(string_io, **pandas_kwargs)
-        if extension == ".json":
+        elif extension == ".json":
             df.to_json(string_io, **pandas_kwargs)
         return blob_client.upload_blob(string_io.getvalue(), overwrite=overwrite)
-    if extension in [".xls", ".xlsx"]:
+    elif extension in [".xls", ".xlsx", ".parquet"]:
         bytes_io = io.BytesIO()
-        df.to_excel(bytes_io, **pandas_kwargs)
+        if extension in [".xls", ".xlsx"]:
+            df.to_excel(bytes_io, **pandas_kwargs)
+        elif extension == ".parquet":
+            df.to_parquet(bytes_io, **pandas_kwargs)
         return blob_client.upload_blob(bytes_io.getvalue(), overwrite=overwrite)
 
     raise TypeError(f"{extension} files are not yet supported.")
@@ -53,11 +56,13 @@ def blob_to_df(
     data_stream = io.BytesIO(blob_client.download_blob().readall())
     if extension == ".csv":
         return pd.read_csv(data_stream, **pandas_kwargs)
-    if extension == ".txt":
+    elif extension == ".txt":
         return pd.read_table(data_stream, **pandas_kwargs)
-    if extension == ".json":
+    elif extension == ".json":
         return pd.read_json(data_stream, **pandas_kwargs)
-    if extension in [".xls", ".xlsx"]:
+    elif extension == ".parquet":
+        return pd.read_parquet(data_stream, **pandas_kwargs)
+    elif extension in [".xls", ".xlsx"]:
         if extension == ".xls" and "engine" not in pandas_kwargs.keys():
             pandas_kwargs.update({"engine": "xlrd"})
         elif "engine" not in pandas_kwargs.keys():

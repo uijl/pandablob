@@ -2,3 +2,4 @@ azure-storage-blob
 openpyxl
 pandas
 xlrd
+pyarrow

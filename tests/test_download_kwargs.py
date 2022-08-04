@@ -8,7 +8,7 @@ import pytest
 import pandablob
 
 
-@pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
+@pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx", "parquet"])
 def test_download_kwargs(mock_download, test_files, pandas_arguments_download, file):
     """Mock downloading from the azure blob with additional kwargs."""
 
@@ -27,12 +27,15 @@ def test_download_kwargs(mock_download, test_files, pandas_arguments_download, f
     if extension == ".csv" or extension == ".txt":
         compare_df = pd.read_table(file_location, delimiter=",", index_col=0)
         assert df.equals(compare_df)
-    if extension == ".json":
+    elif extension == ".json":
         compare_df = pd.read_json(file_location, orient="index")
         assert df.equals(compare_df)
-    if extension == ".xls":
+    elif extension == ".xls":
         compare_df = pd.read_excel(file_location, index_col=0, engine="xlrd")
         assert df.equals(compare_df)
-    if extension == ".xlsx":
+    elif extension == ".xlsx":
         compare_df = pd.read_excel(file_location, index_col=0, engine="openpyxl")
+        assert df.equals(compare_df)
+    elif extension == ".parquet":
+        compare_df = pd.read_parquet(file_location, index_col=0, engine="pyarrow")
         assert df.equals(compare_df)

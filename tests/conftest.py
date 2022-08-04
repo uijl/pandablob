@@ -25,6 +25,7 @@ def pandas_arguments_download():
         "txt": {"delimiter": ",", "index_col": 0},
         "xls": {"index_col": 0},
         "xlsx": {"index_col": 0},
+        "parquet": {"index_col": 0},
     }
 
 
@@ -38,6 +39,7 @@ def pandas_arguments_upload():
         "txt": {"header": ["one", "two"]},
         "xls": {"header": ["one", "two"]},
         "xlsx": {"header": ["one", "two"]},
+        "parquet": {"header": ["one", "two"]},
     }
 
 

@@ -8,7 +8,7 @@ import pytest
 import pandablob
 
 
-@pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
+@pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx", "parquet"])
 def test_upload_kwargs(
     file, test_files, dataframe_upload, pandas_arguments_upload, mock_upload
 ):
