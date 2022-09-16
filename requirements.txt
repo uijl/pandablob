@@ -1,5 +1,5 @@
-azure-storage-blob
-openpyxl
-pandas
-xlrd
-pyarrow
+azure-storage-blob >= 12.8.1
+openpyxl >= 3.0.7
+pandas >= 1.2.4
+pyarrow >= 9.0.0
+xlrd >= 2.0.1
