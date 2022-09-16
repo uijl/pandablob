@@ -25,6 +25,7 @@ def pandas_arguments_download():
         "txt": {"delimiter": ",", "index_col": 0},
         "xls": {"index_col": 0},
         "xlsx": {"index_col": 0},
+        "parquet": {},
     }
 
 
@@ -38,6 +39,7 @@ def pandas_arguments_upload():
         "txt": {"header": ["one", "two"]},
         "xls": {"header": ["one", "two"]},
         "xlsx": {"header": ["one", "two"]},
+        "parquet": {},
     }
 
 
@@ -67,6 +69,12 @@ def dataframe_upload():
             )
         elif file_extension == ".json":
             return pd.read_json(file, **additional_kwargs)
+        elif file_extension == ".parquet":
+            # with open(file) as f:
+            #     file = pd.read_parquet(f, engine="pyarrow", **additional_kwargs)
+            # # test = io.BytesIO()
+            # assert file == Path('/home/uijl/checkout/pandablob/tests/test_files/test_data.parquet')
+            return pd.read_parquet(file, engine="pyarrow", **additional_kwargs)
 
     return _make_dataframe
 

@@ -8,7 +8,7 @@ import pytest
 import pandablob
 
 
-@pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
+@pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx", "parquet"])
 def test_download(file, test_files, mock_download):
     """Mock uploading to the azure blob."""
 
@@ -38,4 +38,7 @@ def test_download(file, test_files, mock_download):
         assert df.equals(compare_df)
     if extension == ".xlsx":
         compare_df = pd.read_excel(file_location, engine="openpyxl")
+        assert df.equals(compare_df)
+    if extension == ".parquet":
+        compare_df = pd.read_parquet(file_location, engine="pyarrow")
         assert df.equals(compare_df)

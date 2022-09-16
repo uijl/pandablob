@@ -8,7 +8,7 @@ import pytest
 import pandablob
 
 
-@pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx"])
+@pytest.mark.parametrize("file", ["csv", "json", "txt", "xls", "xlsx", "parquet"])
 def test_upload_kwargs(
     file, test_files, dataframe_upload, pandas_arguments_upload, mock_upload
 ):
@@ -35,7 +35,14 @@ def test_upload_kwargs(
             extension, pandablob_stream, pandas_arguments_upload[file], True
         )
     else:
+        if extension == ".parquet":
+            pandablob_stream = io.BytesIO(pandablob_stream)
         result_df = dataframe_upload(extension, pandablob_stream, stream=True)
+
+        if extension == ".parquet":
+            result_df.set_index("Unnamed: 0", drop=True, inplace=True)
+            result_df.columns = ["one", "two"]
+            df.set_index("Unnamed: 0", drop=True, inplace=True)
         df.columns = ["one", "two"]
 
     assert df.equals(result_df)
