@@ -31,7 +31,7 @@ def test_upload(file, test_files, dataframe_upload, mock_upload):
     if extension == ".parquet":
         pandablob_stream = io.BytesIO(pandablob_stream)
     result_df = dataframe_upload(extension, pandablob_stream, stream=True)
-    
+
     if extension == ".parquet":
         result_df.set_index("Unnamed: 0", drop=True, inplace=True)
         df.set_index("Unnamed: 0", drop=True, inplace=True)
