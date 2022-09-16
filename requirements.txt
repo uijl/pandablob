@@ -1,4 +1,4 @@
-azure-storage-blob
-openpyxl
-pandas
-xlrd
+azure-storage-blob >= 12.8.1
+openpyxl >= 3.0.7
+pandas >= 1.2.4
+xlrd >= 2.0.1
