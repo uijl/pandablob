@@ -39,10 +39,10 @@ def test_upload_kwargs(
             pandablob_stream = io.BytesIO(pandablob_stream)
         result_df = dataframe_upload(extension, pandablob_stream, stream=True)
 
-    if extension == ".parquet":
-        result_df.set_index("Unnamed: 0", drop=True, inplace=True)
-        result_df.columns = ["one", "two"]
-        df.set_index("Unnamed: 0", drop=True, inplace=True)
+        if extension == ".parquet":
+            result_df.set_index("Unnamed: 0", drop=True, inplace=True)
+            result_df.columns = ["one", "two"]
+            df.set_index("Unnamed: 0", drop=True, inplace=True)
+        df.columns = ["one", "two"]
 
-    df.columns = ["one", "two"]
     assert df.equals(result_df)
