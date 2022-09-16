@@ -37,5 +37,5 @@ def test_download_kwargs(mock_download, test_files, pandas_arguments_download, f
         compare_df = pd.read_excel(file_location, index_col=0, engine="openpyxl")
         assert df.equals(compare_df)
     elif extension == ".parquet":
-        compare_df = pd.read_parquet(file_location, index_col=0, engine="pyarrow")
+        compare_df = pd.read_parquet(file_location, engine="pyarrow")
         assert df.equals(compare_df)
